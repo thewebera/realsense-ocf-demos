@@ -13,6 +13,8 @@ let ptModule = require('node-person');
 let fs = require('fs');
 var childProcess = require('child_process');
 var colors = require('colors');
+let updateResource = require('../client').updateResource;
+let getResource = require('../client').getResource;
 
 let dbPath = './person_recognition_id.db';
 let ptConfig = {
@@ -29,27 +31,15 @@ let cameraConfig = {color: {width: 320, height: 240, frameRate: 30, isEnabled: t
 let pt;
 let prev_result;
 let ledList = {};
-let led1LastChangeTime;
-let led2LastChangeTime;
-let led3LastChangeTime;
-let led4LastChangeTime;
 
 function initialLED() {
-  childProcess.execFile('./test/oic-get', ['/res'], function(err,stdout,stderr){
-    if(err) {
-      console.log('Failed to get led id with error:'+stderr);
+  getResource().then((data) => {
+    ledList = data;
+    closeAllLED();
+  })  
+  .catch((err) => {
+      console.log('Failed to get led id with error:' + err);
       process.exit();
-    } else {
-      stdout = stdout.split('\n')[0];
-      var data = JSON.parse(stdout);
-      data.forEach(function (item){
-        if(item.links[0].href.indexOf('/a/rgbled') > -1 ||
-          item.links[0].href.indexOf('/a/buzzer') > -1){
-          ledList[item.links[0].href] = item.di;  
-        }
-      })
-      closeAllLED();
-    }
   });
 }
 initialLED();
@@ -57,98 +47,11 @@ let rgbFlgOld = 'off';
 let buzzerFlgOld = false;
 function closeAllLED() {
   setTimeout(() => {
-    updateLedStatus('/a/rgbled', 'off');
-    updateLedStatus('/a/buzzer', false);
+    updateResource(ledList['/a/rgbled5'], [0, 0, 0]);
   }, 2000);
-  updateLedStatus('/a/rgbled', 'green');
-  updateLedStatus('/a/buzzer', true);
-}
-function controlLEDbyPersons(persons) {
-  let led1Flg = false;
-  let led2Flg = false;
-  let led3Flg = false;
-  let led4Flg = false;
-  persons.forEach((person) => {
-    let distance = 0;
-    if(person.trackInfo && person.trackInfo.center){
-      distance = person.trackInfo.center.worldCoordinate.z;
-    }
-    if(distance <= 1 && distance > 0) {
-      console.log(colors.blue(distance));
-      led1Flg = true;
-    }
-    if(distance <= 1.3 && distance > 1) {
-      console.log(colors.red(distance));
-      led2Flg = true;
-    }
-    if(distance <= 1.6 && distance > 1.3) {
-      console.log(colors.white(distance));
-      led3Flg = true;
-    }
-    if(distance <= 1.9 && distance > 1.6) {
-      console.log(colors.green(distance));
-      led4Flg = true;
-    }
-  });
-  if(led1FlgOld !== led1Flg) {
-    if (led1Flg){
-      console.log(('update led 1 with' + led1Flg).blue.bold);
-    } else {
-      console.log(('update led 1 with' + led1Flg).blue.inverse);
-    }
-    updateLedStatus(2, '/a/led2', led1Flg); led1FlgOld = led1Flg;
-  }
-  if(led2FlgOld !== led2Flg) {
-    if (led2Flg){
-      console.log(('update led 2 with' + led2Flg).red.bold);
-    } else {
-      console.log(('update led 2 with' + led2Flg).red.inverse);
-    }
-    updateLedStatus(12, '/a/led12', led2Flg); led2FlgOld = led2Flg;
-  } 
-  if(led3FlgOld !== led3Flg) {
-    if (led3Flg){
-      console.log(('update led 3 with' + led3Flg).white.bold);
-    } else {
-      console.log(('update led 3 with' + led3Flg).white.inverse);
-    }
-    updateLedStatus(7, '/a/led7', led3Flg); led3FlgOld = led3Flg;
-  }
-  if(led4FlgOld !== led4Flg) {
-    if (led4Flg){
-      console.log(('update led 4 with' + led4Flg).green.bold);
-    } else {
-      console.log(('update led 4 with' + led4Flg).green.inverse);
-    }
-    updateLedStatus(8, '/a/led8', led4Flg); led4FlgOld = led4Flg;
-  }
+  updateResource(ledList['/a/rgbled5'], [255, 255, 255]);
 }
 
-function updateLedStatus(url, state) {
-    let serverFile;
-    if(state && state === true) {
-        serverFile = './test/led-on.json'
-    } else if (state && state === 'green') {
-        serverFile = './test/rgbled-green.json'
-    } else if (state && state === 'red') {
-        serverFile = './test/rgbled-red.json'
-    } else if (state && state === 'off') {
-        serverFile = './test/rgbled-off.json'
-    } else {
-        serverFile = './test/led-off.json'
-    }
-    url = [url, '?di=', ledList[url]].join('');
-//console.log(url);
-    //childProcess.execFile('./test/oic-post', [url, serverFile], function(err, stdout, stderr){
-console.log("./test/oic-post "+ url + " " + serverFile);
-    childProcess.execFile('./test/oic-post', [url, serverFile], function(err, stdout, stderr){
-        if(err) {
-            console.log('Failed to update led status with error: '+stderr);
-        } else {
-           // console.log('Turn', state, ['led', ledNum].join(''))
-        }
-    })
-}
 ptModule.createPersonTracker(ptConfig, cameraConfig).then((instance) => {
   pt = instance;
   startServer();
@@ -283,7 +186,7 @@ function padding(string, width) {
 }
 
 function sendTrackingAndRecognitionData(result) {
-  let rgbFlg = 'off';
+  let rgbFlg = [0, 0, 0];
   let buzzerFlg = false;
   if (!connected) {
     return;
@@ -299,10 +202,10 @@ function sendTrackingAndRecognitionData(result) {
         pt.personRecognition.recognizePerson(trackInfo.id).then((regData) => {
           if(regData.recognized) {
             console.log('Registered person: ', regData.recognitionID);
-            rgbFlg = 'green';
+            rgbFlg = [0, 128, 0];
             element = constructAPersonData(person, regData.recognitionID);
           } else {
-            rgbFlg = 'red';
+            rgbFlg = [255, 0, 0];
             buzzerFlg = true;
             element = constructAPersonData(person, undefined);
           }
@@ -320,12 +223,12 @@ function sendTrackingAndRecognitionData(result) {
 
   Promise.all(promises).then(() => {
   if(rgbFlgOld !== rgbFlg) {
-    if (rgbFlg){
+    if (rgbFlg !== [0, 0, 0]){
       console.log(('update led 1 with' + rgbFlg).blue.bold);
     } else {
       console.log(('update led 1 with' + rgbFlg).blue.inverse);
     }
-    updateLedStatus('/a/rgbled', rgbFlg); rgbFlgOld = rgbFlg;
+    updateResource(ledList['/a/rgbled5'], rgbFlg); rgbFlgOld = rgbFlg;
   }
   if(buzzerFlgOld !== buzzerFlg) {
     if (buzzerFlg){
