@@ -2,7 +2,7 @@
 iptab_output=`iptables -S`
 echo $iptab_output |grep -v "8000" |grep -v "5683"
 if [[ $? -eq 0 ]];then
-  echo Enable port 5683 and  8000
+  echo 'Enable port 5683 and  8000'
   /usr/sbin/iptables -A INPUT -p udp --dport 5683 -j ACCEPT
   /usr/sbin/iptables -A INPUT -p udp --dport 5684 -j ACCEPT
   /usr/sbin/iptables -A INPUT -p tcp --dport 8000 -j ACCEPT
@@ -12,10 +12,10 @@ fi
 
 echo ps |grep iot-rest-api-server |grep restful
 if [[ $? -ne 0 ]];then
-  echo  Launch iot-rest-api-server...
+  echo  'Launch iot-rest-api-server...'
   systemctl start iot-rest-api-server
 else
-  echo Rest API Server was launched
+  echo 'Rest API Server was launched'
 fi
 
 currentPath=$(cd `dirname $0`; pwd)
