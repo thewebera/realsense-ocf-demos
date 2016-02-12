@@ -29,10 +29,6 @@ let cameraConfig = {color: {width: 320, height: 240, frameRate: 30, isEnabled: t
 let pt;
 let prev_result;
 let ledList = {};
-let led1LastChangeTime;
-let led2LastChangeTime;
-let led3LastChangeTime;
-let led4LastChangeTime;
 
 function initialLED() {
   childProcess.execFile('./test/oic-get', ['/res'], function(err,stdout,stderr){
@@ -57,71 +53,11 @@ let rgbFlgOld = 'off';
 let buzzerFlgOld = false;
 function closeAllLED() {
   setTimeout(() => {
-    updateLedStatus('/a/rgbled', 'off');
+    updateLedStatus('/a/rgbled5', 'off');
     updateLedStatus('/a/buzzer', false);
   }, 2000);
-  updateLedStatus('/a/rgbled', 'green');
+  updateLedStatus('/a/rgbled5', 'green');
   updateLedStatus('/a/buzzer', true);
-}
-function controlLEDbyPersons(persons) {
-  let led1Flg = false;
-  let led2Flg = false;
-  let led3Flg = false;
-  let led4Flg = false;
-  persons.forEach((person) => {
-    let distance = 0;
-    if(person.trackInfo && person.trackInfo.center){
-      distance = person.trackInfo.center.worldCoordinate.z;
-    }
-    if(distance <= 1 && distance > 0) {
-      console.log(colors.blue(distance));
-      led1Flg = true;
-    }
-    if(distance <= 1.3 && distance > 1) {
-      console.log(colors.red(distance));
-      led2Flg = true;
-    }
-    if(distance <= 1.6 && distance > 1.3) {
-      console.log(colors.white(distance));
-      led3Flg = true;
-    }
-    if(distance <= 1.9 && distance > 1.6) {
-      console.log(colors.green(distance));
-      led4Flg = true;
-    }
-  });
-  if(led1FlgOld !== led1Flg) {
-    if (led1Flg){
-      console.log(('update led 1 with' + led1Flg).blue.bold);
-    } else {
-      console.log(('update led 1 with' + led1Flg).blue.inverse);
-    }
-    updateLedStatus(2, '/a/led2', led1Flg); led1FlgOld = led1Flg;
-  }
-  if(led2FlgOld !== led2Flg) {
-    if (led2Flg){
-      console.log(('update led 2 with' + led2Flg).red.bold);
-    } else {
-      console.log(('update led 2 with' + led2Flg).red.inverse);
-    }
-    updateLedStatus(12, '/a/led12', led2Flg); led2FlgOld = led2Flg;
-  } 
-  if(led3FlgOld !== led3Flg) {
-    if (led3Flg){
-      console.log(('update led 3 with' + led3Flg).white.bold);
-    } else {
-      console.log(('update led 3 with' + led3Flg).white.inverse);
-    }
-    updateLedStatus(7, '/a/led7', led3Flg); led3FlgOld = led3Flg;
-  }
-  if(led4FlgOld !== led4Flg) {
-    if (led4Flg){
-      console.log(('update led 4 with' + led4Flg).green.bold);
-    } else {
-      console.log(('update led 4 with' + led4Flg).green.inverse);
-    }
-    updateLedStatus(8, '/a/led8', led4Flg); led4FlgOld = led4Flg;
-  }
 }
 
 function updateLedStatus(url, state) {
@@ -138,9 +74,7 @@ function updateLedStatus(url, state) {
         serverFile = './test/led-off.json'
     }
     url = [url, '?di=', ledList[url]].join('');
-//console.log(url);
-    //childProcess.execFile('./test/oic-post', [url, serverFile], function(err, stdout, stderr){
-console.log("./test/oic-post "+ url + " " + serverFile);
+    console.log("./test/oic-post "+ url + " " + serverFile);
     childProcess.execFile('./test/oic-post', [url, serverFile], function(err, stdout, stderr){
         if(err) {
             console.log('Failed to update led status with error: '+stderr);
@@ -190,13 +124,22 @@ function exit() {
   console.log('\n-------- Stopping --------');
   if (pt) {
     pt.stop().then(() => {
-      process.exit();
+      closeAllLED();
+      setTimeout(() => {
+        process.exit();
+      }, 2000)
     }).catch((error) => {
       console.log('error: ' + error);
-      process.exit();
+      closeAllLED();
+      setTimeout(() => {
+        process.exit();
+      }, 2000)
     });
   } else {
-    process.exit();
+      closeAllLED();
+      setTimeout(() => {
+        process.exit();
+      }, 2000)
   }
 }
 
@@ -325,7 +268,7 @@ function sendTrackingAndRecognitionData(result) {
     } else {
       console.log(('update led 1 with' + rgbFlg).blue.inverse);
     }
-    updateLedStatus('/a/rgbled', rgbFlg); rgbFlgOld = rgbFlg;
+    updateLedStatus('/a/rgbled5', rgbFlg); rgbFlgOld = rgbFlg;
   }
   if(buzzerFlgOld !== buzzerFlg) {
     if (buzzerFlg){
@@ -555,18 +498,6 @@ function startServer() {
           let work;
           if (id > -1) {
             work =pt.personTracking.startTrackingPerson(id);
-        //.then({
-            
-        //pt.personRecognition.registerPerson(trackInfo.id).then((regData) => {
-        //  console.log('Registered person: ', regData.recognitionID);
-        //  element = constructAPersonData(person, regData.recognitionID);
-        //  resultArray.push(element);
-        //  resolve();
-        //}).catch((e) => {
-        //  if (e.status === 'already-registered') {
-        //    element = constructAPersonData(person, e.recognitionID);
-        //  } else {
-        //    });
           } else {
             work = pt.personTracking.resetTracking();
           }

@@ -33,8 +33,7 @@ function initialLED() {
       stdout = stdout.split('\n')[0];
       var data = JSON.parse(stdout);
       data.forEach(function (item){
-        if(item.links[0].href.indexOf('/a/led') > -1 ||
-          item.links[0].href.indexOf('/a/rgbled') > -1 ||
+        if(item.links[0].href.indexOf('/a/rgbled') > -1 ||
           item.links[0].href.indexOf('/a/buzzer') > -1){
           ledList[item.links[0].href] = item.di;  
         }
@@ -45,15 +44,15 @@ function initialLED() {
 }
 
 function closeAllLED() {
-  updateLedStatus(1, '/a/led1', true);
-  updateLedStatus(2, '/a/led2', true);
-  updateLedStatus(3, '/a/led3', true);
-  updateLedStatus(4, '/a/led4', true);
+  updateLedStatus(1, '/a/rgbled1', true);
+  updateLedStatus(2, '/a/rgbled2', true);
+  updateLedStatus(3, '/a/rgbled3', true);
+  updateLedStatus(4, '/a/rgbled4', true);
   setTimeout(() => {
-    updateLedStatus(1, '/a/led1', false);
-    updateLedStatus(2, '/a/led2', false);
-    updateLedStatus(3, '/a/led3', false);
-    updateLedStatus(4, '/a/led4', false);
+    updateLedStatus(1, '/a/rgbled1', false);
+    updateLedStatus(2, '/a/rgbled2', false);
+    updateLedStatus(3, '/a/rgbled3', false);
+    updateLedStatus(4, '/a/rgbled4', false);
   }, 2000);
 }
 
@@ -72,19 +71,19 @@ function controlLEDbyPersons(persons) {
     if(person.trackInfo && person.trackInfo.center){
       distance = person.trackInfo.center.worldCoordinate.z;
     }
-    if(distance <= 1 && distance > 0) {
+    if(distance <= 1 && distance > 0.5) {
       console.log(colors.blue(distance));
       led1Flg = true;
     }
-    if(distance <= 1.3 && distance > 1) {
+    if(distance <= 1.5 && distance > 1) {
       console.log(colors.red(distance));
       led2Flg = true;
     }
-    if(distance <= 1.6 && distance > 1.3) {
+    if(distance <= 2 && distance > 1.5) {
       console.log(colors.white(distance));
       led3Flg = true;
     }
-    if(distance <= 1.9 && distance > 1.6) {
+    if(distance <= 2.5 && distance > 2) {
       console.log(colors.green(distance));
       led4Flg = true;
     }
@@ -95,7 +94,7 @@ function controlLEDbyPersons(persons) {
     } else {
       console.log(('update led 1 with' + led1Flg).blue.inverse);
     }
-    updateLedStatus(1, '/a/led1', led1Flg); led1FlgOld = led1Flg;
+    updateLedStatus(1, '/a/rgbled1', led1Flg); led1FlgOld = led1Flg;
   }
   if(led2FlgOld !== led2Flg) {
     if (led2Flg){
@@ -103,7 +102,7 @@ function controlLEDbyPersons(persons) {
     } else {
       console.log(('update led 2 with' + led2Flg).red.inverse);
     }
-    updateLedStatus(2, '/a/led2', led2Flg); led2FlgOld = led2Flg;
+    updateLedStatus(2, '/a/rgbled2', led2Flg); led2FlgOld = led2Flg;
   } 
   if(led3FlgOld !== led3Flg) {
     if (led3Flg){
@@ -111,7 +110,7 @@ function controlLEDbyPersons(persons) {
     } else {
       console.log(('update led 3 with' + led3Flg).white.inverse);
     }
-    updateLedStatus(3, '/a/led3', led3Flg); led3FlgOld = led3Flg;
+    updateLedStatus(3, '/a/rgbled3', led3Flg); led3FlgOld = led3Flg;
   }
   if(led4FlgOld !== led4Flg) {
     if (led4Flg){
@@ -119,7 +118,7 @@ function controlLEDbyPersons(persons) {
     } else {
       console.log(('update led 4 with' + led4Flg).green.inverse);
     }
-    updateLedStatus(4, '/a/led4', led4Flg); led4FlgOld = led4Flg;
+    updateLedStatus(4, '/a/rgbled4', led4Flg); led4FlgOld = led4Flg;
   }
 }
 
@@ -138,9 +137,9 @@ function updateLedStatus(ledNum, url, state) {
     }
     let serverFile;
     if(state) {
-        serverFile = './test/led-on.json'
+        serverFile = './test/rgbled-on.json'
     } else {
-        serverFile = './test/led-off.json'
+        serverFile = './test/rgbled-off.json'
     }
     url = [url, '?di=', ledList[url]].join('');
 //console.log(url);
@@ -194,15 +193,21 @@ function exit() {
   if (pt) {
     pt.stop().then(() => {
       closeAllLED();
-      process.exit();
+      setTimeout(() => {
+        process.exit();
+      }, 2500)
     }).catch((error) => {
       console.log('error: ' + error);
       closeAllLED();
-      process.exit();
+      setTimeout(() => {
+        process.exit();
+      }, 2500)
     });
   } else {
     closeAllLED();
-    process.exit();
+      setTimeout(() => {
+        process.exit();
+      }, 2500)
   }
 }
 
