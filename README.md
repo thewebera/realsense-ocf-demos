@@ -3,19 +3,16 @@ These samples illustrate how to develop applications using Intel® RealSense™ 
 
 ## Get Start
 
-### Setup RealSense Test Environment on Joule
+### HardWare
 
-1. Please refer to this [guide](https://github.com/01org/node-realsense/blob/master/doc/getting_started.md) for details introduction,
-for this section "Build C++ Add-on", there is other method to install it, since this add on has been published as a module in
-[npmjs](https://www.npmjs.com/search?q=realsense), so you can install it via below command:
+- PC with wi-fi module built in  
+- [Intel® Joule™ Module](https://software.intel.com/en-us/iot/hardware/joule) * 2
+- [Intel® RealSense™ Camera ZR300](https://newsroom.intel.com/chip-shots/intel-announces-tools-realsense-technology-development/)
+- [Grove LED Socket kit](http://www.seeedstudio.com/wiki/Grove_-_LED) * 4
+- [Grove Chainable RGB LED](http://www.seeedstudio.com/depot/twig-chainable-rgb-led-p-850.html?cPath=156_157)
 
-    ```
-    # npm install --save node-person
-    ```
-
-    - Note: You need to set system date to your current timezone at first, otherwise, maybe you will take a lot of time to install this module,
-and you can via command `sudo date -s "20170410 1327"` to update the time.
-
+### Setup Environment on PC
+1. Make sure Ubuntu 16.04 installed on your PC.
 2. Create a wireless LAN via [`create_ap`](https://github.com/oblique/create_ap) tool
     - Install this tool
        ```
@@ -28,7 +25,11 @@ and you can via command `sudo date -s "20170410 1327"` to update the time.
        # sudo create_ap wlp1s0 wlp1s0 MyAccessPoint
        ```
 
-### Setup OCF Server Test Environment on Joule
+### Setup RealSense Execution Environment on Joule
+
+Please refer to this [tutorial](https://github.com/01org/node-realsense/blob/master/doc/setup_environment.md) for details introduction.
+
+### Setup OCF Server Test Environment on another Joule
 1. Please follow this [instruction](https://github.com/intel/intel-iot-refkit/blob/master/doc/howtos/image-install.rst) to install
 [iot-ref-kit image](http://iot-ref-kit.ostc.intel.com/download/builds/intel-iot-refkit_master/).
 
