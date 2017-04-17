@@ -201,6 +201,8 @@ transporter.onPTDataUpdate = (timestamp, pt_data) => {
                 if(pt_object.hasOwnProperty('rid'))
                 {
                     ctx2d.strokeStyle = "rgba(0, 238, 0, 1.0)";      // Color of pointing - green
+                }else {
+                    ctx2d.strokeStyle = "rgba(250, 50, 50, 1.0)";      // Color of pointing - red 
                 }
                 ctx2d.strokeRect(rectX, rectY, rectW, rectH); //Draw each person rectangle
 
