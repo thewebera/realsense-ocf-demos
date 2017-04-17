@@ -59,10 +59,10 @@ let led2FlgOld = false;
 let led3FlgOld = false;
 let led4FlgOld = false;
 function closeAllLED() {
-  updateLedStatus(2, '/a/led2', led1FlgOld);
-  updateLedStatus(12, '/a/led12', led2FlgOld);
-  updateLedStatus(7, '/a/led7', led3FlgOld);
-  updateLedStatus(8, '/a/led8', led4FlgOld);
+  updateLedStatus(2, '/a/led2', false);
+  updateLedStatus(12, '/a/led12', false);
+  updateLedStatus(7, '/a/led7', false);
+  updateLedStatus(8, '/a/led8', false);
 }
 function controlLEDbyPersons(persons) {
   let led1Flg = false;

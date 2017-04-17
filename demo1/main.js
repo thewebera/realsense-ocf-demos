@@ -29,6 +29,7 @@ function initialLED() {
   childProcess.execFile('./test/oic-get', ['/res'], function(err,stdout,stderr){
     if(err) {
       console.log('Failed to get led id with error:'+stderr);
+      closeAllLED();
       process.exit();
     } else {
       stdout = stdout.split('\n')[0];
@@ -38,9 +39,18 @@ function initialLED() {
           ledList[item.links[0].href] = item.di;  
         }
       })
+      closeAllLED();
     }
   });
 }
+
+function closeAllLED() {
+  updateLedStatus(2, '/a/led2', false);
+  updateLedStatus(12, '/a/led12', false);
+  updateLedStatus(7, '/a/led7', false);
+  updateLedStatus(8, '/a/led8', false);
+}
+
 initialLED();
 let led1FlgOld = false;
 let led2FlgOld = false;
@@ -177,12 +187,15 @@ function exit() {
   console.log('\n-------- Stopping --------');
   if (pt) {
     pt.stop().then(() => {
+      closeAllLED();
       process.exit();
     }).catch((error) => {
       console.log('error: ' + error);
+      closeAllLED();
       process.exit();
     });
   } else {
+    closeAllLED();
     process.exit();
   }
 }
