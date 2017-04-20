@@ -38,15 +38,23 @@ Please refer to this [tutorial](https://github.com/01org/node-realsense/blob/mas
 1. Please follow this [instruction](https://github.com/intel/intel-iot-refkit/blob/master/doc/howtos/image-install.rst) to install
 [iot-ref-kit image](http://iot-ref-kit.ostc.intel.com/download/builds/intel-iot-refkit_master/).
 
-2. There are some dependencies(uuid-dev, libcure4-openssl-dev and a C++ compiler (gcc-5 or later) etc.) need to install at first, you can install them via command:
+2. Add Authorized Keys for Remote ssh Access
+   In Yotoc Reference Kit OS Gateway images, root automatically gets logged in on a local console or serial port connection. You can enable remote access as root via ssh in your image by installing your personal public key in the `~root/.ssh/authorized_keys` file.
+
+   You’ll first need to have a private/public key pair on your workstation to enable ssh access to the target device. You can use an existing host ssh key pair, found in $HOME/.ssh. A private/public key pair will be stored in two files for example, `.ssh/id_rsa` and `.ssh/id_rsa.pub`.
+
+   If you don’t see private/public key files, you’ll need to generate them, please refer to [here](https://help.github.com/articles/connecting-to-github-with-ssh/) get more information about how to  generate an ssh key.
+
+
+3. There are some dependencies(uuid-dev, libcure4-openssl-dev and a C++ compiler (gcc-5 or later) etc.) need to install at first, you can install them via command:
 
     ```
     # sudo apt-get install uuid-dev libcurl4-openssl-dev libboost-all-dev sqlite3 glib2.0-dev
     ```
     
-3. Install [`iotivity-node`](https://github.com/otcshare/iotivity-node) via command `npm install iotivity-node`, for detail information
+4. Install [`iotivity-node`](https://github.com/otcshare/iotivity-node) via command `npm install iotivity-node`, for detail information
 please refer to [here](https://github.com/otcshare/iotivity-node/blob/master/README.md).
-4. [`iot-rest-api-server`](https://github.com/01org/iot-rest-api-server/) also is necessary, install method is same as `iotivity-node`,
+5. [`iot-rest-api-server`](https://github.com/01org/iot-rest-api-server/) also is necessary, install method is same as `iotivity-node`,
 run command `npm install iot-rest-api-server`. After install the server, enter the Joule device and using below command to launch this server:
 
     ```
@@ -78,7 +86,7 @@ run command `npm install iot-rest-api-server`. After install the server, enter t
     # iptables -A INPUT -p udp --dport <start>:<end> -j ACCEPT
     # ip6tables -A INPUT -s fe80::/10 -p udp -m udp --dport <start>:<end> -j ACCEPT
     ```
-5. Enter to the Joule device and connect to WIFI "MyAccessPoint"
+6. Enter to the Joule device and connect to WIFI "MyAccessPoint"
     ```
     root@iot-ref-kit#: connmanctl
       connmanctl> enable wifi
