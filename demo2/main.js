@@ -28,7 +28,6 @@ let cameraConfig = {color: {width: 320, height: 240, frameRate: 30, isEnabled: t
                     depth: {width: 320, height: 240, frameRate: 30, isEnabled: true}};
 let pt;
 let prev_result;
-let cmd_curl = 'curl http://192.168.12.53:8000/api/oic/res';
 let ledList = {};
 let led1LastChangeTime;
 let led2LastChangeTime;
@@ -36,7 +35,6 @@ let led3LastChangeTime;
 let led4LastChangeTime;
 
 function initialLED() {
-  //childProcess.exec(cmd_curl, function(err,stdout,stderr){
   childProcess.execFile('./test/oic-get', ['/res'], function(err,stdout,stderr){
     if(err) {
       console.log('Failed to get led id with error:'+stderr);
@@ -45,7 +43,8 @@ function initialLED() {
       stdout = stdout.split('\n')[0];
       var data = JSON.parse(stdout);
       data.forEach(function (item){
-        if(item.links[0].href.indexOf('/a/led') > -1){
+        if(item.links[0].href.indexOf('/a/rgbled') > -1 ||
+          item.links[0].href.indexOf('/a/buzzer') > -1){
           ledList[item.links[0].href] = item.di;  
         }
       })
@@ -54,15 +53,15 @@ function initialLED() {
   });
 }
 initialLED();
-let led1FlgOld = false;
-let led2FlgOld = false;
-let led3FlgOld = false;
-let led4FlgOld = false;
+let rgbFlgOld = 'off';
+let buzzerFlgOld = false;
 function closeAllLED() {
-  updateLedStatus(2, '/a/led2', false);
-  updateLedStatus(12, '/a/led12', false);
-  updateLedStatus(7, '/a/led7', false);
-  updateLedStatus(8, '/a/led8', false);
+  setTimeout(() => {
+    updateLedStatus('/a/rgbled', 'off');
+    updateLedStatus('/a/buzzer', false);
+  }, 2000);
+  updateLedStatus('/a/rgbled', 'green');
+  updateLedStatus('/a/buzzer', true);
 }
 function controlLEDbyPersons(persons) {
   let led1Flg = false;
@@ -125,22 +124,16 @@ function controlLEDbyPersons(persons) {
   }
 }
 
-function updateLedStatus(ledNum, url, state) {
-    if(ledNum === 1 && new Date - led1LastChangeTime <= 1000) {
-      return; 
-    }
-    if(ledNum === 2 && new Date - led2LastChangeTime <= 1000) {
-      return; 
-    }
-    if(ledNum === 3 && new Date - led3LastChangeTime <= 1000) {
-      return; 
-    }
-    if(ledNum === 4 && new Date - led4LastChangeTime <= 1000) {
-      return; 
-    }
+function updateLedStatus(url, state) {
     let serverFile;
-    if(state) {
+    if(state && state === true) {
         serverFile = './test/led-on.json'
+    } else if (state && state === 'green') {
+        serverFile = './test/rgbled-green.json'
+    } else if (state && state === 'red') {
+        serverFile = './test/rgbled-red.json'
+    } else if (state && state === 'off') {
+        serverFile = './test/rgbled-off.json'
     } else {
         serverFile = './test/led-off.json'
     }
@@ -290,8 +283,8 @@ function padding(string, width) {
 }
 
 function sendTrackingAndRecognitionData(result) {
-  let led1Flg = false;
-  let led2Flg = false;
+  let rgbFlg = 'off';
+  let buzzerFlg = false;
   if (!connected) {
     return;
   }
@@ -306,10 +299,11 @@ function sendTrackingAndRecognitionData(result) {
         pt.personRecognition.recognizePerson(trackInfo.id).then((regData) => {
           if(regData.recognized) {
             console.log('Registered person: ', regData.recognitionID);
-            led1Flg = true;
+            rgbFlg = 'green';
             element = constructAPersonData(person, regData.recognitionID);
           } else {
-            led2Flg = true;
+            rgbFlg = 'red';
+            buzzerFlg = true;
             element = constructAPersonData(person, undefined);
           }
           resultArray.push(element);
@@ -325,21 +319,21 @@ function sendTrackingAndRecognitionData(result) {
   });
 
   Promise.all(promises).then(() => {
-  if(led1FlgOld !== led1Flg) {
-    if (led1Flg){
-      console.log(('update led 1 with' + led1Flg).blue.bold);
+  if(rgbFlgOld !== rgbFlg) {
+    if (rgbFlg){
+      console.log(('update led 1 with' + rgbFlg).blue.bold);
     } else {
-      console.log(('update led 1 with' + led1Flg).blue.inverse);
+      console.log(('update led 1 with' + rgbFlg).blue.inverse);
     }
-    updateLedStatus(2, '/a/led2', led1Flg); led1FlgOld = led1Flg;
+    updateLedStatus('/a/rgbled', rgbFlg); rgbFlgOld = rgbFlg;
   }
-  if(led2FlgOld !== led2Flg) {
-    if (led2Flg){
-      console.log(('update led 2 with' + led2Flg).red.bold);
+  if(buzzerFlgOld !== buzzerFlg) {
+    if (buzzerFlg){
+      console.log(('update led 2 with' + buzzerFlg).red.bold);
     } else {
-      console.log(('update led 2 with' + led2Flg).red.inverse);
+      console.log(('update led 2 with' + buzzerFlg).red.inverse);
     }
-    updateLedStatus(12, '/a/led12', led2Flg); led2FlgOld = led2Flg;
+    updateLedStatus('/a/buzzer', buzzerFlg); buzzerFlgOld = buzzerFlg;
   } 
     let resultToDisplay = {
       Object_result: resultArray,

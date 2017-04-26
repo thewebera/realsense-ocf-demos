@@ -17,7 +17,6 @@ let ptConfig = {tracking: {enable: true, trackingMode: 'following'}};
 let cameraConfig = {color: {width: 320, height: 240, frameRate: 30, isEnabled: true},
                     depth: {width: 320, height: 240, frameRate: 30, isEnabled: true}};
 let pt;
-let cmd_curl = 'curl http://192.168.12.53:8000/api/oic/res';
 let ledList = {};
 let led1LastChangeTime;
 let led2LastChangeTime;
@@ -25,7 +24,6 @@ let led3LastChangeTime;
 let led4LastChangeTime;
 
 function initialLED() {
-  //childProcess.exec(cmd_curl, function(err,stdout,stderr){
   childProcess.execFile('./test/oic-get', ['/res'], function(err,stdout,stderr){
     if(err) {
       console.log('Failed to get led id with error:'+stderr);
@@ -35,7 +33,9 @@ function initialLED() {
       stdout = stdout.split('\n')[0];
       var data = JSON.parse(stdout);
       data.forEach(function (item){
-        if(item.links[0].href.indexOf('/a/led') > -1){
+        if(item.links[0].href.indexOf('/a/led') > -1 ||
+          item.links[0].href.indexOf('/a/rgbled') > -1 ||
+          item.links[0].href.indexOf('/a/buzzer') > -1){
           ledList[item.links[0].href] = item.di;  
         }
       })
@@ -45,10 +45,16 @@ function initialLED() {
 }
 
 function closeAllLED() {
-  updateLedStatus(2, '/a/led2', false);
-  updateLedStatus(12, '/a/led12', false);
-  updateLedStatus(7, '/a/led7', false);
-  updateLedStatus(8, '/a/led8', false);
+  updateLedStatus(1, '/a/led1', true);
+  updateLedStatus(2, '/a/led2', true);
+  updateLedStatus(3, '/a/led3', true);
+  updateLedStatus(4, '/a/led4', true);
+  setTimeout(() => {
+    updateLedStatus(1, '/a/led1', false);
+    updateLedStatus(2, '/a/led2', false);
+    updateLedStatus(3, '/a/led3', false);
+    updateLedStatus(4, '/a/led4', false);
+  }, 2000);
 }
 
 initialLED();
@@ -89,7 +95,7 @@ function controlLEDbyPersons(persons) {
     } else {
       console.log(('update led 1 with' + led1Flg).blue.inverse);
     }
-    updateLedStatus(2, '/a/led2', led1Flg); led1FlgOld = led1Flg;
+    updateLedStatus(1, '/a/led1', led1Flg); led1FlgOld = led1Flg;
   }
   if(led2FlgOld !== led2Flg) {
     if (led2Flg){
@@ -97,7 +103,7 @@ function controlLEDbyPersons(persons) {
     } else {
       console.log(('update led 2 with' + led2Flg).red.inverse);
     }
-    updateLedStatus(12, '/a/led12', led2Flg); led2FlgOld = led2Flg;
+    updateLedStatus(2, '/a/led2', led2Flg); led2FlgOld = led2Flg;
   } 
   if(led3FlgOld !== led3Flg) {
     if (led3Flg){
@@ -105,7 +111,7 @@ function controlLEDbyPersons(persons) {
     } else {
       console.log(('update led 3 with' + led3Flg).white.inverse);
     }
-    updateLedStatus(7, '/a/led7', led3Flg); led3FlgOld = led3Flg;
+    updateLedStatus(3, '/a/led3', led3Flg); led3FlgOld = led3Flg;
   }
   if(led4FlgOld !== led4Flg) {
     if (led4Flg){
@@ -113,7 +119,7 @@ function controlLEDbyPersons(persons) {
     } else {
       console.log(('update led 4 with' + led4Flg).green.inverse);
     }
-    updateLedStatus(8, '/a/led8', led4Flg); led4FlgOld = led4Flg;
+    updateLedStatus(4, '/a/led4', led4Flg); led4FlgOld = led4Flg;
   }
 }
 
