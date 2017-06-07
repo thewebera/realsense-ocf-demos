@@ -13,14 +13,14 @@
 // limitations under the License.
 
 var device = require('iotivity-node'),
-    debuglog = require('util').debuglog('rgb_led'),
+    debuglog = require('util').debuglog('rgb_led4'),
     rgbLEDResource,
     sensorPin,
     sensorState = false,
     exitId,
     observerCount = 0,
     resourceTypeName = 'oic.r.colour.rgb',
-    resourceInterfaceName = '/a/rgbled',
+    resourceInterfaceName = '/a/rgbled4',
     range = [0,255],
     rgbValue = [0,0,0],
     clockPin,
@@ -54,9 +54,9 @@ function setupHardware() {
     if (!mraa)
         return;
 
-    clockPin = new mraa.Gpio(7);
+    clockPin = new mraa.Gpio(16);
     clockPin.dir(mraa.DIR_OUT);
-    dataPin = new mraa.Gpio(8);
+    dataPin = new mraa.Gpio(14);
     dataPin.dir(mraa.DIR_OUT);
 
     setColourRGB(0, 0, 0);
