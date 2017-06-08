@@ -8,7 +8,7 @@ The following demos are provided in this release.
 
 ## Get Start
 
-### HardWare
+### Hardware
 
 - PC with wi-fi module built in  
 - [Intel® Joule™ Module](https://software.intel.com/en-us/iot/hardware/joule) * 2
