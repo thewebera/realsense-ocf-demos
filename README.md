@@ -1,5 +1,6 @@
 # RealSense OCF Demos
 These samples illustrate how to develop applications using Intel® RealSense™ JavaScript [API](https://01org.github.io/node-realsense/doc/spec) and Open Connectivity Foundation™ ([OCF](https://openconnectivity.org)) JavaScript [API](https://github.com/01org/iot-js-api/tree/master/ocf).
+![Image](./docs/architecture.jpg?raw=true)
 
 ## Functionality
 The following demos are provided in this release.
