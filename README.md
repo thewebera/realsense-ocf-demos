@@ -1,18 +1,14 @@
 # RealSense OCF Demos
 These samples illustrate how to develop applications using Intel® RealSense™ JavaScript [API](https://01org.github.io/node-realsense/doc/spec) and Open Connectivity Foundation™ ([OCF](https://openconnectivity.org)) JavaScript [API](https://github.com/01org/iot-js-api/tree/master/ocf).
 
-![Image](./doc/architecture.png?raw=true)
-
-
-## Functionality
-The following demos are provided in this release.
- - **Control light by distance**: This sample app illustrates the use of libRealsense, libPT, and the Linux SDK Framework to use the ZR300 camera's depth and color sensors to detect people in the scene. Detected person in the scene will be displayed with the distance information on screen. Meanwhile, the led lights will be on and off according to the person's position changing.
- - **Control light/buzzer by person recognition**：This sample app illustrates how to register new users to the database, uploade the database to identify them when they appear in the scene. Recognized person in the scene will light a green led, otherwise light a red one.
-
 ## Architecture
 
 ![Image](./doc/sh-ocf-arc.png?raw=true)
 
+## Functionality
+The following demos are provided in this release.
+ - **Control light by distance**(demo1): This sample app illustrates the use of libRealsense, libPT, and the Linux SDK Framework to use the ZR300 camera's depth and color sensors to detect people in the scene. Detected person in the scene will be displayed with the distance information on screen. Meanwhile, the led lights will be on and off according to the person's position changing.
+ - **Control light/buzzer by person recognition**(demo2)：This sample app illustrates how to register new users to the database, uploade the database to identify them when they appear in the scene. Recognized person in the scene will light a green led, otherwise light a red one.
 
 ## Get Start
 
@@ -42,7 +38,7 @@ The following demos are provided in this release.
    # git clone https://github.com/thewebera/realsense-ocf-demos.git
    # cd realsense-ocf-demo
    ```
-   Then enter directory "demo1" or "demo2", following the corresponding README file to launch the demo. 
+   Please follow below guide to set up ocf server environment at first, then you can enter directory "demo1" or "demo2", following the corresponding README file to launch the demo. 
 
 ### Setup OCF Server Test Environment on another Joule
 1. Please follow this [instruction](https://github.com/intel/intel-iot-refkit/blob/master/doc/howtos/image-install.rst) to install
@@ -124,4 +120,4 @@ The following demos are provided in this release.
    # cd ocf-servers
    # ./init-ocf-server.sh
    ```
-Launch all sensors server.
+   Launch all sensors server.
