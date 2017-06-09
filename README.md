@@ -1,10 +1,14 @@
 # RealSense OCF Demos
 These samples illustrate how to develop applications using Intel® RealSense™ JavaScript [API](https://01org.github.io/node-realsense/doc/spec) and Open Connectivity Foundation™ ([OCF](https://openconnectivity.org)) JavaScript [API](https://github.com/01org/iot-js-api/tree/master/ocf).
 
+## Architecture
+
+![Image](./doc/sh-rest-arc.png?raw=true)
+
 ## Functionality
 The following demos are provided in this release.
- - **Control light by distance**: This sample app illustrates the use of libRealsense, libPT, and the Linux SDK Framework to use the ZR300 camera's depth and color sensors to detect people in the scene. Detected person in the scene will be displayed with the distance information on screen. Meanwhile, the led lights will be on and off according to the person's position changing.
- - **Control light/buzzer by person recognition**：This sample app illustrates how to register new users to the database, uploade the database to identify them when they appear in the scene. Recognized person in the scene will light a green led, otherwise light a red one.
+ - **Control light by distance**(demo1): This sample app illustrates the use of libRealsense, libPT, and the Linux SDK Framework to use the ZR300 camera's depth and color sensors to detect people in the scene. Detected person in the scene will be displayed with the distance information on screen. Meanwhile, the led lights will be on and off according to the person's position changing.
+ - **Control light/buzzer by person recognition**(demo2)：This sample app illustrates how to register new users to the database, uploade the database to identify them when they appear in the scene. Recognized person in the scene will light a green led, otherwise light a red one.
 
 ## Get Start
 
@@ -16,27 +20,29 @@ The following demos are provided in this release.
 - [Grove LED Socket kit](http://www.seeedstudio.com/wiki/Grove_-_LED) * 4
 - [Grove Chainable RGB LED](http://www.seeedstudio.com/depot/twig-chainable-rgb-led-p-850.html?cPath=156_157)
 
-### Setup Environment on PC
-1. Make sure Ubuntu 16.04 installed on your PC.
-2. Create a wireless LAN via [`create_ap`](https://github.com/oblique/create_ap) tool
-    - Install this tool
-       ```
-       # git clone https://github.com/oblique/create_ap
-       # cd create_ap
-       # make install
-       ```
-   - Lunch it and create a LAN
-       ```
-       # sudo create_ap wlp1s0 wlp1s0 MyAccessPoint
-       ```
-
 ### Setup RealSense Execution Environment on Joule
 
-Please refer to this [tutorial](https://github.com/01org/node-realsense/blob/master/doc/setup_environment.md) for details introduction.
+1. Please refer to this [tutorial](https://github.com/01org/node-realsense/blob/master/doc/setup_environment.md) for details introduction.
+
+2. [Create a WiFi hotspot on Ubuntu 16.04](http://ubuntuhandbook.org/index.php/2016/04/create-wifi-hotspot-ubuntu-16-04-android-supported/)
+
+3. There are some dependencies(uuid-dev, libcure4-openssl-dev and a C++ compiler (gcc-5 or later) etc.) need to install at first, you can install them via command:
+   ```
+   # sudo apt-get install uuid-dev libcurl4-openssl-dev libboost-all-dev sqlite3 glib2.0-dev
+   ```
+
+4. Install [`iotivity-node`](https://github.com/otcshare/iotivity-node) via command `npm install iotivity-node`, for detail information, please refer to [here](https://github.com/otcshare/iotivity-node/blob/master/README.md).
+
+5. Execute belows commands to start this demo journey:
+   ```bash
+   # git clone https://github.com/thewebera/realsense-ocf-demos.git
+   # cd realsense-ocf-demo
+   ```
+   Please follow below guide to setup ocf server environment at frist, then you can enter directory "demo1" or "demo2", following the corresponding README file to launch the demo. 
 
 ### Setup OCF Server Test Environment on another Joule
 1. Please follow this [instruction](https://github.com/intel/intel-iot-refkit/blob/master/doc/howtos/image-install.rst) to install
-[iot-ref-kit image](http://iot-ref-kit.ostc.intel.com/download/builds/intel-iot-refkit_master/).
+[iot-ref-kit image](http://iot-ref-kit.ostc.intel.com/download/builds/intel-iot-refkit_master/) which named like "refkit-image-gateway-intel-corei7-64-<build-version>.wic ".
 
 2. Add Authorized Keys for Remote ssh Access
    In Yotoc Reference Kit OS Gateway images, root automatically gets logged in on a local console or serial port connection. You can enable remote access as root via ssh in your image by installing your personal public key in the `~root/.ssh/authorized_keys` file.
@@ -45,17 +51,7 @@ Please refer to this [tutorial](https://github.com/01org/node-realsense/blob/mas
 
    If you don’t see private/public key files, you’ll need to generate them, please refer to [here](https://help.github.com/articles/connecting-to-github-with-ssh/) get more information about how to  generate an ssh key.
 
-
-3. There are some dependencies(uuid-dev, libcure4-openssl-dev and a C++ compiler (gcc-5 or later) etc.) need to install at first, you can install them via command:
-
-    ```
-    # sudo apt-get install uuid-dev libcurl4-openssl-dev libboost-all-dev sqlite3 glib2.0-dev
-    ```
-    
-4. Install [`iotivity-node`](https://github.com/otcshare/iotivity-node) via command `npm install iotivity-node`, for detail information
-please refer to [here](https://github.com/otcshare/iotivity-node/blob/master/README.md).
-5. [`iot-rest-api-server`](https://github.com/01org/iot-rest-api-server/) also is necessary, install method is same as `iotivity-node`,
-run command `npm install iot-rest-api-server`. After install the server, enter the Joule device and using below command to launch this server:
+3. Enter the Joule device and using below command to launch iot-rest-api-server:
 
     ```
     # systemctl start iot-rest-api-server
@@ -86,7 +82,7 @@ run command `npm install iot-rest-api-server`. After install the server, enter t
     # iptables -A INPUT -p udp --dport <start>:<end> -j ACCEPT
     # ip6tables -A INPUT -s fe80::/10 -p udp -m udp --dport <start>:<end> -j ACCEPT
     ```
-6. Enter to the Joule device and connect to WIFI "MyAccessPoint"
+4. Enter to the Joule device and connect to WIFI "MyAccessPoint"
     ```
     root@iot-ref-kit#: connmanctl
       connmanctl> enable wifi
@@ -119,4 +115,9 @@ run command `npm install iot-rest-api-server`. After install the server, enter t
              valid_lft forever preferred_lft forever
     ```
     This Joule must have one ip is same domain as the first Joule which setup realsense environment.
-
+5. Launch ocf-servers on this board, copy the downloaded repo "realsense-ocf-demo/ocf-servers" on the RealSense board to this board, then run below commands:
+   ```
+   # cd ocf-servers
+   # ./init-ocf-server.sh
+   ```
+   Launch all sensors server.
