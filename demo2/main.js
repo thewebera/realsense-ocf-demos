@@ -51,7 +51,8 @@ function closeAllLED() {
   }, 2000);
   updateResource(ledList['/a/rgbled5'], [255, 255, 255]);
 }
-
+let skippingFrame = 30;
+let numFrame = 0;
 ptModule.createPersonTracker(ptConfig, cameraConfig).then((instance) => {
   pt = instance;
   startServer();
@@ -66,8 +67,11 @@ ptModule.createPersonTracker(ptConfig, cameraConfig).then((instance) => {
     }
   });
   pt.on('persontracked', function(result) {
-    prev_result = result;
-    sendTrackingAndRecognitionData(result);
+    numFrame++;
+    if (numFrame % skippingFrame === 0) {
+      prev_result = result;
+      sendTrackingAndRecognitionData(result);
+    }
   });
 
   return pt.start();
@@ -222,7 +226,7 @@ function sendTrackingAndRecognitionData(result) {
   });
 
   Promise.all(promises).then(() => {
-  if(rgbFlgOld !== rgbFlg) {
+  if(JSON.stringify(rgbFlgOld) !== JSON.stringify(rgbFlg)) {
     if (rgbFlg !== [0, 0, 0]){
       console.log(('update led 1 with' + rgbFlg).blue.bold);
     } else {
@@ -230,7 +234,7 @@ function sendTrackingAndRecognitionData(result) {
     }
     updateResource(ledList['/a/rgbled5'], rgbFlg); rgbFlgOld = rgbFlg;
   }
-  if(buzzerFlgOld !== buzzerFlg) {
+  if(JSON.stringify(buzzerFlgOld) !== JSON.stringify(buzzerFlg)) {
     if (buzzerFlg){
       console.log(('update led 2 with' + buzzerFlg).red.bold);
     } else {
@@ -458,18 +462,6 @@ function startServer() {
           let work;
           if (id > -1) {
             work =pt.personTracking.startTrackingPerson(id);
-        //.then({
-            
-        //pt.personRecognition.registerPerson(trackInfo.id).then((regData) => {
-        //  console.log('Registered person: ', regData.recognitionID);
-        //  element = constructAPersonData(person, regData.recognitionID);
-        //  resultArray.push(element);
-        //  resolve();
-        //}).catch((e) => {
-        //  if (e.status === 'already-registered') {
-        //    element = constructAPersonData(person, e.recognitionID);
-        //  } else {
-        //    });
           } else {
             work = pt.personTracking.resetTracking();
           }

@@ -22,10 +22,8 @@ return new Promise((resolve, reject) => {
           } else {
             ledList[resource.resourcePath] = resource;
             count++;
-            console.log(count);
           }
         if (count == 6) {
-          console.log(ledList);
           setTimeout(() => {
             resolve(ledList);
           }, 2000);
@@ -43,7 +41,6 @@ return new Promise((resolve, reject) => {
 }
 
 var updateResource = function (resource, color){
-console.log(resource);
   resource.properties.rgbValue = color;
   client.update(resource)
   .then(
