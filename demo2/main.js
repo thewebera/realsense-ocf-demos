@@ -63,7 +63,7 @@ function closeAllLED() {
 function updateLedStatus(url, state) {
     let serverFile;
     if(state && state === true) {
-        serverFile = './test/led-on.json'
+        serverFile = './test/buzzer-on.json'
     } else if (state && state === 'green') {
         serverFile = './test/rgbled-green.json'
     } else if (state && state === 'red') {
@@ -71,7 +71,7 @@ function updateLedStatus(url, state) {
     } else if (state && state === 'off') {
         serverFile = './test/rgbled-off.json'
     } else {
-        serverFile = './test/led-off.json'
+        serverFile = './test/buzzer-off.json'
     }
     url = [url, '?di=', ledList[url]].join('');
     console.log("./test/oic-post "+ url + " " + serverFile);
