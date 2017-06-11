@@ -29,8 +29,6 @@ function initialLED() {
   getResource().then((data) => {
     ledList = data;
     closeAllLED();
-    closeAllLED();
-    closeAllLED();
   })
   .catch((err) => {
       console.log('Failed to get led id with error:' + err);
