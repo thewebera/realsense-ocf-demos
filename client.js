@@ -40,8 +40,12 @@ return new Promise((resolve, reject) => {
 });
 }
 
-var updateResource = function (resource, color){
-  resource.properties.rgbValue = color;
+var updateResource = function (resource, data){
+  if (resource.resourcePath.indexOf('/a/buzzer') > -1 ) {
+    resource.properties.value = data;
+  }else {
+    resource.properties.rgbValue = data;
+  }
   client.update(resource)
   .then(
       function(updateResource){

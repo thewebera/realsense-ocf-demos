@@ -48,8 +48,10 @@ let buzzerFlgOld = false;
 function closeAllLED() {
   setTimeout(() => {
     updateResource(ledList['/a/rgbled5'], [0, 0, 0]);
+    updateResource(ledList['/a/buzzer'], false);
   }, 2000);
   updateResource(ledList['/a/rgbled5'], [255, 255, 255]);
+  updateResource(ledList['/a/buzzer'], true);
 }
 let skippingFrame = 30;
 let numFrame = 0;
@@ -227,20 +229,10 @@ function sendTrackingAndRecognitionData(result) {
 
   Promise.all(promises).then(() => {
   if(JSON.stringify(rgbFlgOld) !== JSON.stringify(rgbFlg)) {
-    if (rgbFlg !== [0, 0, 0]){
-      console.log(('update led 1 with' + rgbFlg).blue.bold);
-    } else {
-      console.log(('update led 1 with' + rgbFlg).blue.inverse);
-    }
     updateResource(ledList['/a/rgbled5'], rgbFlg); rgbFlgOld = rgbFlg;
   }
   if(JSON.stringify(buzzerFlgOld) !== JSON.stringify(buzzerFlg)) {
-    if (buzzerFlg){
-      console.log(('update led 2 with' + buzzerFlg).red.bold);
-    } else {
-      console.log(('update led 2 with' + buzzerFlg).red.inverse);
-    }
-    updateLedStatus('/a/buzzer', buzzerFlg); buzzerFlgOld = buzzerFlg;
+    updateResource(ledList['/a/buzzer'], buzzerFlg); buzzerFlgOld = buzzerFlg;
   } 
     let resultToDisplay = {
       Object_result: resultArray,
