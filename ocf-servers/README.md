@@ -24,6 +24,9 @@ For Joule pin number, please refer to this image:
 | Chainable RGB LED | 16--Clock, 14--Data      |[Grove Chainable RGB LED](http://wiki.seeed.cc/Grove-Chainable_RGB_LED/)      |
 | Chainable RGB LED | 20--Clock, 18--Data      |[Grove Chainable RGB LED](http://wiki.seeed.cc/Grove-Chainable_RGB_LED/)      |
 
+Mount RGB LED1 with Joule board as shown in the following picture (LED 2, 3, 4, 5 could go with the same way and buzzer only need to connect `SIG` to Pin `33`):
+![](../doc/sensor_connection.png)
+
 ### Software platform for OCF servers
 All these OCF servers are running on the [IoT Reference OS Kit](http://iot-ref-kit.ostc.intel.com/download/builds/intel-iot-refkit_master/2017-05-31_21-43-10-build-204/images/intel-corei7-64/), please choose the gateway type image.
 You can flash the image to a USB drive and then boot Joule from USB drive.
