@@ -5,7 +5,7 @@ These samples illustrate how to develop applications using Intel® RealSense™ 
 
 ![Image](./doc/sh-rest-arc.png?raw=true)
 
-## Functionality
+## Demos
 The following demos are provided in this release.
  - **Control light by distance**(demo1): This sample app illustrates the use of libRealsense, libPT, and the Linux SDK Framework to use the ZR300 camera's depth and color sensors to detect people in the scene. Detected person in the scene will be displayed with the distance information on screen. Meanwhile, the led lights will be on and off according to the person's position changing.
  - **Control light/buzzer by person recognition**(demo2)：This sample app illustrates how to register new users to the database, uploade the database to identify them when they appear in the scene. Recognized person in the scene will light a green led, otherwise light a red one and open buzzer.
@@ -114,5 +114,7 @@ The following demos are provided in this release.
     This Joule must have one ip is same domain as the first Joule which setup realsense environment.
 
 ### Known issue:
+- [#135](https://github.com/otcshare/iotivity-node/issues/135) Sometimes OCF Client can't find OCF Server resource
+(This is a critical issue that will cause the demonstration unstable or failure, in order to avoid this issue, you could switch to `restapi` branch which is stable version)
 - After connect the sensors to Joule board and power on this board, maybe sensor rgbled or buzzer is on, please ignore this behavior, once OS is loaded and the servers file are launched, the sensor will off.
 
