@@ -20,7 +20,7 @@ Person can be recognized and the recognition database can be stored when clickin
 
 ## Screen shot
 
-1. When person in front of camera at 0.5 ~ 1 m, light1 turn on red color.
+1. When person in front of camera at different distance, light* turns on red color. (* means 1, 2, 3,4)
 
-<img width="400" alt="Image" src="../doc/demo1/demo1_browser_ONE.png">
-<img width="400" alt="Image" src="../doc/demo1/demo1_red_ONE.png">
+<img width="600" alt="Image" src="../doc/demo1/demo1_browser_ONE.png">
+<img width="300" alt="Image" src="../doc/demo1/demo1_red_ONE.png">
