@@ -44,7 +44,7 @@ The following demos are provided in this release.
 
    If you don’t see private/public key files, you’ll need to generate them, please refer to [here](https://help.github.com/articles/connecting-to-github-with-ssh/) get more information about how to  generate an ssh key.
 
-3. Please refer to this [guidance](./ocf-servers/README.md) to setup the sensors on this board
+3. Please refer to this [guidance](./ocf-servers/README.md#setting-up-the-hw) to setup the sensors on this board
 
 4. Copy the downloaded repo "realsense-ocf-demo/ocf-servers" from the RealSense board to this board, then launch all sensors server. Firewall and iot-rest-api-server have been setted up in file `init-ocf-server.sh`, you can run this file directly or execute step 5 manually.
 
@@ -114,5 +114,5 @@ The following demos are provided in this release.
     This Joule must have one ip is same domain as the first Joule which setup realsense environment.
 
 ### Known issue:
-- [#135](https://github.com/otcshare/iotivity-node/issues/135) Sometimes OCF Client can't find OCF Server resource
-(This is a critical issue that will cause the demonstration unstable or failure)
+- After connect the sensors to Joule board and power on this board, maybe sensor rgbled or buzzer is on, please ignore this behavior, once OS is loaded and the servers file are launched, the sensor will off.
+
