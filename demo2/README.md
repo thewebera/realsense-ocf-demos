@@ -17,14 +17,14 @@ $ node main.js
 Note: Open a brower in any remote machine that is on the same network as target, enter url "TargetIPaddr:8000/view.html". Ex:10.30.90.130:8000/view.html
 Person can be recognized and the recognition database can be stored when clicking the person to track him/her. The stored database can also be loaded.
 
-## Screen shot
+## Screenshot
 
 1. When person is not recognized, light is on red and buzzer turns on.
 
 <img width="600" alt="Image" src="../doc/demo2/demo2_browser_red.png">
 <img width="300" alt="Image" src="../doc/demo2/demo2_red_light.png">
 
-2. Click person's box on the screen, the person will be recognized and store in database. The light will will be on green.
+2. Click person's box on the screen, the person will be recognized and store in database. The light will be on green. (If you want to clear the database, remove DB file `./demo2/person_recognition_id.db` directly.)
 
 <img width="600" alt="Image" src="../doc/demo2/demo2_browser_green.png">
 <img width="300" alt="Image" src="../doc/demo2/demo2_green_light.png">

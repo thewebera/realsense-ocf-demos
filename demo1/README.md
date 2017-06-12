@@ -18,9 +18,9 @@ $ node main.js
 Note: Open a brower in any remote machine that is on the same network as target, enter url "TargetIPaddr:8000/view.html". Ex:10.30.90.130:8000/view.html
 Person can be recognized and the recognition database can be stored when clicking the person to track him/her. The stored database can also be loaded.
 
-## Screen shot
+## Screenshot
 
-1. When person in front of camera at different distance, light* turns on red color. (* means 1, 2, 3,4)
+When person in front of camera at different distance, light* turns on red color. (* means 1, 2, 3,4)
 
 <img width="600" alt="Image" src="../doc/demo1/demo1_browser_ONE.png">
 <img width="300" alt="Image" src="../doc/demo1/demo1_red_ONE.png">
