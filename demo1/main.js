@@ -142,7 +142,7 @@ function updateLedStatus(lid, state) {
     });
     setTimeout(() => {
       return pt.start();
-    }, 20000);
+    }, 10000);
   }).catch((error) => {
     console.log('error: ' + error);
   });
