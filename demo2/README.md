@@ -19,12 +19,12 @@ Person can be recognized and the recognition database can be stored when clickin
 
 ## Screen shot
 
-1. Person is not recognized, light turn red and buzzer on.
+1. When person is not recognized, light is on red and buzzer turns on.
 
-<img width="400" alt="Image" src="../doc/demo2/demo2_browser_red.png">
-<img width="400" alt="Image" src="../doc/demo2/demo2_red_light.png">
+<img width="600" alt="Image" src="../doc/demo2/demo2_browser_red.png">
+<img width="300" alt="Image" src="../doc/demo2/demo2_red_light.png">
 
-2. Click person's box on the screen, the person will be recognized and store in database. The light will turn to green.
+2. Click person's box on the screen, the person will be recognized and store in database. The light will will be on green.
 
-<img width="400" alt="Image" src="../doc/demo2/demo2_browser_green.png">
-<img width="400" alt="Image" src="../doc/demo2/demo2_green_light.png">
+<img width="600" alt="Image" src="../doc/demo2/demo2_browser_green.png">
+<img width="300" alt="Image" src="../doc/demo2/demo2_green_light.png">
