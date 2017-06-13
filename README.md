@@ -20,6 +20,11 @@ The following demos are provided in this release.
 - [Grove Chainable RGB LED](http://www.seeedstudio.com/depot/twig-chainable-rgb-led-p-850.html?cPath=156_157) * 5
 - [Grove Buzzer](http://wiki.seeed.cc/Grove-Buzzer/)
 
+### Software
+- iotivity-node: v1.2.0-1
+- iot-rest-api-server: v0.2
+- node-person: v0.10.1
+
 ### Setup RealSense Execution Environment on Joule
 
 1. Please refer to this [tutorial](https://github.com/01org/node-realsense/blob/master/doc/setup_environment.md) for details introduction.
@@ -114,7 +119,5 @@ The following demos are provided in this release.
     This Joule must have one ip is same domain as the first Joule which setup realsense environment.
 
 ### Known issue:
-- [#135](https://github.com/otcshare/iotivity-node/issues/135) Sometimes OCF Client can't find OCF Server resource
-(This is a critical issue that will cause the demonstration unstable or failure, in order to avoid this issue, you could switch to `restapi` branch which is stable version)
 - After connect the sensors to Joule board and power on this board, maybe sensor rgbled or buzzer is on, please ignore this behavior, once OS is loaded and the servers file are launched, the sensor will off.
 
