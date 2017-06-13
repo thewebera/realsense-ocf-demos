@@ -20,6 +20,10 @@ The following demos are provided in this release.
 - [Grove Chainable RGB LED](http://www.seeedstudio.com/depot/twig-chainable-rgb-led-p-850.html?cPath=156_157) * 5
 - [Grove Buzzer](http://wiki.seeed.cc/Grove-Buzzer/) * 1
 
+### Software
+- iotivity-node: v1.2.0-1
+- node-person: v0.10.1
+
 ### Setup RealSense Execution Environment on Joule
 
 1. Please refer to this [tutorial](https://github.com/01org/node-realsense/blob/master/doc/setup_environment.md) for details introduction.
@@ -30,8 +34,7 @@ The following demos are provided in this release.
    ```
    # sudo apt-get install uuid-dev libcurl4-openssl-dev libboost-all-dev sqlite3 glib2.0-dev
    ```
-
-4. Install [`iotivity-node`](https://github.com/otcshare/iotivity-node) via command `npm install iotivity-node`, for detail information, please refer to [here](https://github.com/otcshare/iotivity-node/blob/master/README.md).
+4. Install [`iotivity-node`](https://github.com/otcshare/iotivity-node) via command `npm install iotivity-node@1.2.0-1`, for detail information, please refer to [here](https://github.com/otcshare/iotivity-node/blob/master/README.md).
 
 5. Execute belows commands to start this demo journey:
    ```bash
